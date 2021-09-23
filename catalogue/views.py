@@ -6,6 +6,7 @@ from django.shortcuts import render
 # VBF vista basada en funcion
 def catalogue(request):
     # TODO: logic
-    return HttpResponse("Holaaaa")
+    title: str = "Empresa online"
+    return render(request, 'catalogue/index.html', {"title_b": title})
 
 # VBC vista basada en clase
