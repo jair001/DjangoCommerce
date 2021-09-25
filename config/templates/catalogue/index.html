@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+<!-- se comenta porque hereda de base.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,3 +10,9 @@
     <h1>Bienvenidos {{ title_b }}</h1>
 </body>
 </html>
+-->
+{% block title %} Bienvenidos {% endblock %}
+
+{% block content %}
+    <h1>{{ title_b }}</h1>
+{% endblock%}

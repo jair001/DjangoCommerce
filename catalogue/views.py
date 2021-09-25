@@ -4,7 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 
 # VBF vista basada en funcion
-def catalogue(request):
+def index(request):
     # TODO: logic
     title: str = "Empresa online"
     return render(request, 'catalogue/index.html', {"title_b": title})
