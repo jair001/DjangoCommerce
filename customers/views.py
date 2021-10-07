@@ -1,7 +1,10 @@
 # from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse_lazy
+from django.contrib import messages
+
 from customers.forms import BasicCustomerForm
 from customers.models import CustomerModel
 
@@ -22,6 +25,15 @@ def customers_create(request):
         form = BasicCustomerForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data # devuelve un diccionario dict {"full_name": <>, "dni": <>}
+            customer = CustomerModel()
+            customer.full_name = data.get('full_name')
+            customer.dni = data.get('dni')
+            customer.save()
+            messages.success(request, "Registro Guardado")
+            # redirect redirecciona a un html, junto con reverese_lazy, el parametro es el nombre de la app y la clase a la q quiere que vaya de views
+            return redirect(reverse_lazy("customers:customers_list"))
+            # print("Registro Guardado")
         else:
-            print("Error")
+            messages.error(request, "Error al registrar")
+            # print("Error")
     return render(request, "customers/create.html", {"form": form})

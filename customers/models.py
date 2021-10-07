@@ -18,10 +18,10 @@ class CustomerModel(models.Model):
     modified_at = models.DateTimeField(auto_now=True, verbose_name='Fecha de modificación', null=True, blank=True)
     deleted_at = models.DateTimeField(verbose_name='Fecha de eliminación', null=True, blank=True)
 
-class Meta:
-    verbose_name = "Customer"
-    verbose_name_plural = "Customers"
-    db_table = "customer"
+    class Meta:
+        verbose_name = "Customer"
+        verbose_name_plural = "Customers"
+        db_table = "customer"
 
-def __str__(self):
-    return f"[{self.dni}] {self.full_name}"
+    def __str__(self):
+        return f"[{self.dni}] {self.full_name}"

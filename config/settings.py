@@ -34,6 +34,7 @@ INSTALLED_APPS = [
 
     # LOCAL APPS
     'catalogue.apps.CatalogueConfig',
+    'customers.apps.CustomersConfig',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +75,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'DjangoCommerce',
+        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'Jesp406'
     }
 }
 
@@ -117,9 +121,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIR = [
-    BASE_DIR / "config/static"
+# print(BASE_DIR / "static")
+PATH_STATIC = BASE_DIR / "config/static"
+STATICFILES_DIRS = [
+    str(PATH_STATIC)
 ]
+print(STATICFILES_DIRS)
 # STATIC_ROOT = BASE_DIR / 'config/static'
 # print(STATIC_ROOT)
 
