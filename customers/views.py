@@ -1,7 +1,7 @@
 # from django.http import HttpResponse
 from datetime import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse_lazy
@@ -79,3 +79,13 @@ def customers_edit(request, identifier: int):
             else:
                 messages.error(request, "Error al editar")
     return render(request, "customers/update.html", {"form": form})
+
+
+# ELIMINAR
+def customers_delete(request, id: int):
+    customer = get_object_or_404(CustomerModel, id=id, status=True)
+    customer.deleted_at = datetime.now()
+    customer.status = False
+    customer.save()
+    messages.success(request, "Cliente eliminado")
+    return redirect(reverse_lazy("customers:customers_list"))
