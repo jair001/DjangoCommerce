@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Edición Cliente</title>
 </head>
 <body>
-
+    <form action="." method="post">{% csrf_token %}
+        <!-- as_p convierte la clase form a objeto -->
+        {{ form.as_p }}
+        <input type="submit" value="EDITAR" >
+    </form>
 </body>
 </html>
