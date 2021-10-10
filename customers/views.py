@@ -1,6 +1,7 @@
 # from django.http import HttpResponse
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -12,6 +13,8 @@ from customers.models import CustomerModel
 
 
 # LISTAR
+
+# @login_required()
 def customers_list(request):
     customers = CustomerModel.objects.filter(status=True).order_by("full_name")
     # return HttpResponse("Lista de clientes") # response devuelve un mensaje, render puede gestionar una plantilla
@@ -20,6 +23,9 @@ def customers_list(request):
 
 
 # OBTENER
+# @login_required() indica antes de cada funcion, que requiere estar logueado, se coloca antes de cada funcion
+# login_url redirecciona
+@login_required(login_url='/security/login')
 def customer_detail(request, identifier: int):
     # el campo identifier se pasa a las urls
     try:
@@ -31,6 +37,7 @@ def customer_detail(request, identifier: int):
 
 
 # CREAR
+@login_required(login_url='/security/login')
 def customers_create(request):
     form = BasicCustomerForm()
     # captura la info del formulario, si el request fue desde un post:
@@ -41,6 +48,7 @@ def customers_create(request):
             customer = CustomerModel()
             customer.full_name = data.get('full_name')
             customer.dni = data.get('dni')
+            customer.created_by = request.user
             customer.save()
             # se puede guardar con una sola linea
             # CustomerModel.objects.create(full_name=data.get('full_name'), dni=data.get('dni'))
@@ -55,6 +63,7 @@ def customers_create(request):
 
 
 # ACTUALIZAR
+@login_required(login_url='/security/login')
 def customers_edit(request, identifier: int):
     # 1. Obtener registro a editar
     try:
@@ -73,6 +82,7 @@ def customers_edit(request, identifier: int):
                 customer.full_name = data.get("full_name")
                 customer.dni = data.get("dni")
                 customer.modified_at = datetime.now()
+                customer.modified_by = request.user
                 customer.save()
                 messages.success(request,"Cliente modificado")
                 return redirect(reverse_lazy("customers:customers_list"))
@@ -82,6 +92,7 @@ def customers_edit(request, identifier: int):
 
 
 # ELIMINAR
+@login_required(login_url='/security/login')
 def customers_delete(request, id: int):
     customer = get_object_or_404(CustomerModel, id=id, status=True)
     customer.deleted_at = datetime.now()

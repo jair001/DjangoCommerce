@@ -24,8 +24,14 @@
 							<ul class="list-main">
 								<li><i class="ti-location-pin"></i> Store location</li>
 								<li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
-								<li><i class="ti-user"></i> <a href="#">My account</a></li>
-								<li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
+
+								{% if request.user.is_authenticated %}
+									<li><i class="ti-user"></i>Bienvenido {{ request.user }}</li>
+									<li><i class="ti-door"></i> <a href="{% url 'users:logout' %}">
+										Cerrar sesión</a></li>
+								{% else %}
+									<li><i class="ti-power-off"></i><a href="{% url 'users:login' %}">Iniciar sesión</a></li>
+								{% endif%}
 							</ul>
 						</div>
 						<!-- End Top Right -->
