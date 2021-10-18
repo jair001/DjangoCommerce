@@ -88,3 +88,19 @@ class OrderModel(models.Model):
 
     def __str__(self):
         return f"{self.code}"
+
+
+# colocar una señal (signal), la funcion es pasar un evento a un archivo
+# pre_save es el metodo, sender es quien va a ser afectado con pre_save
+# antes de guardar va a hacer algo en OrderModel
+@receiver(pre_save, sender=OrderModel)
+def set_code(sender, instance, **kwargs):
+    index = 0
+    sequence = SequenceModel.objects.all().first()
+    if sequence:
+        index = sequence.current +1
+        sequence.current = index
+        sequence.save(update_fields=['current'])
+    reference = str(index)
+    end_code = f"DC{reference.zfill(4)}"  # -> DC1, DC2...
+    instance.code = end_code
