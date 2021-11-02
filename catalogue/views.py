@@ -7,7 +7,7 @@ from catalogue.models import CategoryModel
 from catalogue.models import ItemModel
 
 
-# VBF vista basada en funcion
+# VBF vista basada en funcion, existen otras # VBC vista basada en clase
 def index(request):
     # TODO: logic
     title: str = "Empresa online"
@@ -17,11 +17,16 @@ def index(request):
 
     # parametro que viene desde el buscador del formulario
     param = request.GET.get("search", None)    # si el parametro search está vacio, ponga None
-    if param:
+    param_category = request.GET.get("search-category", None)
+    if param or param_category:
         # Q permite realizar consultas por campos, ver djanjo queries Q
         # __ indica que accede a un metodo o campo
         # | significa or, and es la coma cuando se usa Q
-        items = items.filter(Q(name__icontains=param) | Q(category__name__icontains=param))
+        items = items.filter(
+            Q(name__icontains=param) |
+            Q(category__name__icontains=param) |
+            Q(category__pk__exact=int(param_category))
+        )
 
     return render(request, 'catalogue/index.html', {"categories": categories, "items": items})
 
@@ -37,4 +42,13 @@ def category_items(request, category_slug=None):
         message = "no existe"
         flag=False
     return render(request, '', {"filtered_items": filtered_items, "flag": flag, "message": message})
-# VBC vista basada en clase
+
+
+def item_detail(request, id:int):
+    try:
+        item = ItemModel.objects.get(id=id)
+    except ItemModel.DoesNotExist:
+        item = None
+
+    return render(request, "catalogue/item_detail.html", {"item": item})
+
