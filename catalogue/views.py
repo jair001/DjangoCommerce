@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
@@ -11,9 +12,18 @@ def index(request):
     # TODO: logic
     title: str = "Empresa online"
 
-    categories = CategoryModel.objects.order_by('name')  # Lista categorias ordenadas por nombre
     items = ItemModel.objects.filter(stock=True).order_by('name')  # Lista de productos en stock
-    return render(request, 'catalogue/index.html', {"title_b": title, "categories": categories, "items": items})
+    categories = CategoryModel.objects.order_by('name')  # Lista categorias ordenadas por nombre
+
+    # parametro que viene desde el buscador del formulario
+    param = request.GET.get("search", None)    # si el parametro search está vacio, ponga None
+    if param:
+        # Q permite realizar consultas por campos, ver djanjo queries Q
+        # __ indica que accede a un metodo o campo
+        # | significa or, and es la coma cuando se usa Q
+        items = items.filter(Q(name__icontains=param) | Q(category__name__icontains=param))
+
+    return render(request, 'catalogue/index.html', {"categories": categories, "items": items})
 
 def category_items(request, category_slug=None):
     # Envía excepción si no encuentra o una instancia de objeto q ser+ia el registro de nuestra base en este caso una categoría

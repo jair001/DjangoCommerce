@@ -66,17 +66,26 @@
 					</div>
 					<div class="col-lg-8 col-md-7 col-12">
 						<div class="search-bar-top">
-							<div class="search-bar">
-								<select>
-									<option selected="selected">All Category</option>
-									<option>watch</option>
-									<option>mobile</option>
-									<option>kid’s item</option>
-								</select>
-								<form>
-									<input name="search" placeholder="Search Products Here....." type="search">
-									<button class="btnn"><i class="ti-search"></i></button>
+							<div>
+								<form class="search-bar" method="get" action=".">
+									<!--
+										toda consulta se hace por get, actualizacion o envio de datos es por post
+									 	"." significa que el controlador espera la acción actual
+									 -->
+									<select name="search-category">
+										<option selected="selected">Categorías</option>
+										{% for category in categories %}
+											<option value="{{ category.name }}">{{ category.name }}</option>
+										{% endfor %}
+									</select>
+
+									{# capturar el criterio de busqueda y enviar al controlador #}
+									<input name="search" placeholder="Buscar Productos" type="search">
+									<button type="submit" class="btnn"><i class="ti-search"></i></button>
+									{# type="submit" envío al servidor #}
 								</form>
+								
+
 							</div>
 						</div>
 					</div>
