@@ -30,4 +30,5 @@ urlpatterns = [
     path('', include('catalogue.urls', namespace="catalogue")),
     path('customers/', include('customers.urls', namespace="customers")),
     path('security/', include('users.urls', namespace='users')),
+    path('order/', include('orders.urls', namespace='orders')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
