@@ -4,3 +4,4 @@ django-import-export==2.5.0
 django-admin-thumbnails-0.2.6
 psycopg2-binary==2.9
 django-crispy-forms==1.13.0
+python-dotenv==0.19.1

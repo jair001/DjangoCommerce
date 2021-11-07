@@ -104,3 +104,15 @@ def set_code(sender, instance, **kwargs):
     reference = str(index)
     end_code = f"DC{reference.zfill(4)}"  # -> DC1, DC2...
     instance.code = end_code
+
+@receiver(post_save, sender=OrderModel)
+def notification_email(sender, instance, **kwargs):
+    # instance.customer.email
+    # email = "rnoboa22@gmail.com"
+    email = "jair001@hotmail.com"
+    subject, from_email, to = 'Notificacion de Orden', 'admin@mitienda.com', email
+    text_content = f'Order creada exitosamente.'
+    html_content = f'<p>{instance.code}, gracias por tu compra.</p>'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

@@ -1,24 +1,22 @@
 """
 Django settings for config project.
+se cambia x settings ya que usa .env
 """
-
+import os   # lee donde está el sistema operativo
+from dotenv import load_dotenv  # lea de .env
 from pathlib import Path
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env_path = Path(".") / ".env"
+load_dotenv(dotenv_path=env_path)   # todas las variables lea de este path
 
+# SECRET_KEY = 'django-insecure-7jg$e@y*-53t5xls#9893-k+h00%k3if1t+e)#i!)l4_f2ze)z'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
+# DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7jg$e@y*-53t5xls#9893-k+h00%k3if1t+e)#i!)l4_f2ze)z'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -77,8 +75,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -88,7 +85,16 @@ DATABASES = {
         'PASSWORD': 'Jesp406'
     }
 }
-
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv("SQL_ENGINE"),
+        'NAME': os.getenv("SQL_DATABASE"),
+        'HOST': os.getenv("SQL_HOST"),
+        'USER': os.getenv("SQL_USER"),
+        'PASSWORD': os.getenv("SQL_PASSWORD")
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -144,3 +150,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# EMAILs
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
